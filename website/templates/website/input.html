@@ -1,0 +1,33 @@
+{% extends "website/index.html" %}
+{% load staticfiles%}
+
+{% block title %}ROBCO_ROOTKIT{% endblock %}
+{% block header %}
+  <script type='text/javascript' src='{% static 'website/code.js' %}'></script>
+{% endblock %}
+
+{% block content %}
+  <form method='post'>
+    <p>
+      <textarea id='words' name='words' rows='3'></textarea>
+    </p>
+    <p id='suggest'>
+      Suggested word: <select id='word_choice'></select>
+    </p>
+    <div id='guess'>
+      <div class='row'>
+        <div id='correct_mask' class='disabled'>
+          <select name='correct' id='correct'>
+            <option value='1'>0</option>
+          </select>
+        </div>
+        <div id='btn_submit_mask'>
+          <input type='button' value='Number Correct' id='btn_submit' />
+        </div>
+      </div>
+      <input type='button' value='Word Removed' id='btn_removed' />
+    </div>
+    <p id='wordlist'>&nbsp;</p>
+    <p id='message'>&nbsp;</p>
+  </form>
+{% endblock %}

@@ -1,0 +1,132 @@
+* {
+  color: #0f0;
+  background: #000;
+  font-family:Courier New,  monospace;
+}
+
+input, input:focus, textarea, textarea:focus, select, select:focus {
+  border: 1px dashed #0f0;
+  padding: 0.25em;
+  outline: none !important;
+  padding: 1em 0;
+}
+
+select, select:focus {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: #000;
+  padding: 0;
+  margin: 0;
+  text-align-last: center;
+  cursor: pointer;
+}
+
+select::-ms-expand {
+    display: none;
+}
+
+select:focus, input:focus {
+  background: #0f0;
+  color: #000;
+}
+
+input[disabled], select[disabled] {
+  border-color: #999;
+  color: #999;
+}
+
+h1 {
+  font-weight: normal;
+}
+
+#btn_submit, #btn_removed {
+  cursor: pointer;
+}
+
+#words {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 1.25em;
+  padding: 0.5em;;
+}
+
+#suggest {
+  text-align: center;
+  margin: 0;
+  float: left;
+  width: 45%;
+  font-size: 1.5em;
+}
+
+#suggest select {
+  display: block;
+  margin-top: 0.25em;
+  font-size: 2em;
+  width: 100%;
+  border-width: 0;
+}
+
+#guess {
+  width: 45%;
+  float: right;
+}
+
+#guess .row {
+  clear: both;
+  width: 100%;
+  display: table;
+}
+
+#guess #correct_mask {
+  width: 4em;
+  position: relative;
+  display: table-cell;
+  overflow: hidden;
+}
+#guess #correct_mask:focus {
+  border-color: #f00;
+}
+#guess #correct_mask.disabled {
+  border-color: #999;;
+}
+#guess #correct {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  cursor: pointer;
+  font-size:1.25em;
+}
+#btn_submit_mask {
+  padding-left: 5px;
+  display: table-cell;
+}
+#btn_submit {
+  width: 100%;
+}
+#guess #btn_removed {
+  width: 100%;
+  margin-top: 2em;
+}
+
+#wordlist {
+  text-align: center;
+  clear: both;
+  padding-top: 2em;
+}
+
+#wordlist  span {
+  border-bottom: 1px solid #000;
+  padding-bottom: 2px;
+}
+
+#wordlist .invalid {
+  color: #f00;
+  border-bottom: 1px solid #f00;
+}
+
+#wordlist span {
+  cursor: pointer;
+}
