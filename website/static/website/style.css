@@ -4,11 +4,20 @@
   font-family:Courier New,  monospace;
 }
 
+body {
+  font-size: 14px;
+}
+
 input, input:focus, textarea, textarea:focus, select, select:focus {
   border: 1px dashed #0f0;
   padding: 0.25em;
   outline: none !important;
   padding: 1em 0;
+}
+
+input, select {
+  height: 50px !important;
+  box-sizing: border-box;
 }
 
 select, select:focus {
