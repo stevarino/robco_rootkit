@@ -7,6 +7,8 @@ class FunctionTestCase(TestCase):
         pass
 
     def test_score_word(self):
+        """ score_word should return the number of letters one word shares
+            with another."""
         self.assertEqual(1, score_word('a', 'a'))
         self.assertEqual(1, score_word('aa', 'ab'))
         self.assertEqual(1, score_word('ba', 'bb'))
@@ -16,4 +18,26 @@ class FunctionTestCase(TestCase):
         self.assertEqual(2, score_word('abc', 'abd'))
 
     def test_scoring(self):
-        pass
+        """ score_words returns a list of tuples containing score and
+            word. Score is determined by comparing each word to every
+            other word (including itself) and summing common letters."""
+        scores = score_words(['foo', 'far', 'has', 'car'])
+        expected = [(7, 'far'), (6, 'car'), (5, 'has'),  (4 , 'foo')]
+        self.assertEqual(scores, expected)
+
+    def test_validate_dupes(self):
+        """ Ensure duplicates are caught."""
+        dupes, msg = validate_words(["foo", "bar", "baz", "foo"])
+        self.assertEqual(["foo"], dupes)
+
+    def test_validate_lens(self):
+        """ Ensure words of unequal length are caught. Correct length is
+            whichever length is the most common."""
+        lens, msg = validate_words(["foo", "john", "bar", "baz"])
+        self.assertEqual(["john"], lens)
+
+    def test_filter(self):
+        """ Check that words which are not possible are filtered."""
+        words = ['card', 'fate', 'date', 'daft']
+        filtered = filter_scores(score_words(words), 'card', 1)
+        self.assertEqual([(9, 'date'), (8, 'fate'), (7, 'daft')], filtered)
