@@ -2,10 +2,11 @@ from django.http import HttpResponse, JsonResponse, Http404
 from django.core.exceptions import SuspiciousOperation
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-import json
-import re
 
 from . import models
+
+import json
+import re
 
 # Create your views here.
 import datetime
@@ -17,30 +18,27 @@ def index(request):
 
 @csrf_exempt
 def api(request):
-    if request.is_ajax() and request.method == 'POST':
+    if not request.is_ajax() or request.method != 'POST':
+        raise SuspiciousOperation("No data received.")
+
+    try:
         body = json.loads(request.body)
-    if "words" not in body:
-        raise SuspiciousOperation("Did not receive word list.")
-    response = {'valid': True, 'words': []}
+    except:
+        raise SuspiciousOperation("Invalid json request.")
+
+    try:
+        assert isinstance(body.get('words'), unicode)
+
+        feedback = body.get('feedback', [])
+        assert isinstance(feedback, list)
+        for fb in feedback:
+            assert isinstance(fb, dict)
+            assert isinstance(fb.get('word'), unicode)
+            assert isinstance(fb.get('feedback'), int)
+    except AssertionError:
+        raise SuspiciousOperation("Invalid API request.")
+
+
     words = re.findall(word_pattern, body["words"].upper())
-    invalid, msg = models.validate_words(words)
-
-    if len(invalid) > 0:
-        response['valid'] = False
-        response['message'] = msg
-        for word in words:
-            word_response = {'word': word}
-            if word in invalid:
-                 word_response['invalid'] = True
-            response['words'].append(word_response)
-    else:
-        scores = models.score_words(words)
-        for score, word in scores:
-            word_response = {
-                'word': word,
-                'score': score,
-                'position': "{}/{}".format(words.index(word)+1, len(words))
-            }
-
-            response['words'].append(word_response)
+    response = models.request_words(words, feedback)
     return JsonResponse(response)

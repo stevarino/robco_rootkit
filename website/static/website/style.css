@@ -49,8 +49,18 @@ h1 {
   font-weight: normal;
 }
 
-#btn_submit, #btn_removed {
+#btn_submit {
   cursor: pointer;
+}
+
+#word_p {
+  width: calc(50% - 0.5em);
+  float: left;
+  margin: 0;
+  height: 11em;
+  margin-right: 1em;
+  box-sizing: border-box;
+  position: relative;
 }
 
 #words {
@@ -58,13 +68,24 @@ h1 {
   box-sizing: border-box;
   font-size: 1.25em;
   padding: 0.5em;;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+#guess {
+  width: calc(50% - 0.5em);
+  margin: 0;
+  float: left;
+  height: 11em;
+  position: relative;
 }
 
 #suggest {
   text-align: center;
-  margin: 0;
-  float: left;
-  width: 45%;
+  margin: 0 auto;
   font-size: 1.5em;
 }
 
@@ -76,15 +97,12 @@ h1 {
   border-width: 0;
 }
 
-#guess {
-  width: 45%;
-  float: right;
-}
-
 #guess .row {
   clear: both;
   width: 100%;
   display: table;
+  position: absolute;
+  bottom: 0;
 }
 
 #guess #correct_mask {
@@ -114,10 +132,8 @@ h1 {
 }
 #btn_submit {
   width: 100%;
-}
-#guess #btn_removed {
-  width: 100%;
-  margin-top: 2em;
+  font-size: 1.25em;
+  padding: 0;
 }
 
 #wordlist {
@@ -138,4 +154,39 @@ h1 {
 
 #wordlist span {
   cursor: pointer;
+}
+
+#message {
+  margin: 1em 0;
+  text-align: center;
+  clear: both;
+  padding-top: 1em;
+}
+
+table {
+  width: 400px;
+  margin: 1em auto;
+}
+
+table td {
+  text-align: center;
+}
+
+.invalid {
+  color: #c00;
+}
+
+@media screen and (max-width: 480px) {
+  #guess {
+    float: none;
+    width: 100%;
+  }
+  #word_p {
+    float: none;
+    width: 100%;
+    margin: 0;
+  }
+  table {
+    width: 100%;
+  }
 }

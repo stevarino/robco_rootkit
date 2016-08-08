@@ -41,3 +41,12 @@ class FunctionTestCase(TestCase):
         words = ['card', 'fate', 'date', 'daft']
         filtered = filter_scores(score_words(words), 'card', 1)
         self.assertEqual([(9, 'date'), (8, 'fate'), (7, 'daft')], filtered)
+
+    def test_filter_remove(self):
+        """ If a word is removed from the  puzzle, don't include it in
+            scoring."""
+        words = ['cart', 'fate', 'date', 'daft']
+        filtered = filter_scores(score_words(words), 'fate', -1)
+        self.assertEqual([(8, 'daft'), (7, 'date'), (7, 'cart')], filtered)
+
+    

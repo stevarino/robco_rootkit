@@ -8,13 +8,13 @@
 
 {% block content %}
   <form method='post'>
-    <p>
+    <p id='word_p'>
       <textarea id='words' name='words' rows='3'></textarea>
     </p>
-    <p id='suggest'>
-      Suggested word: <select id='word_choice'></select>
-    </p>
     <div id='guess'>
+      <p id='suggest'>
+        Suggested word: <select id='word_choice'></select>
+      </p>
       <div class='row'>
         <div id='correct_mask' class='disabled'>
           <select name='correct' id='correct'>
@@ -22,12 +22,21 @@
           </select>
         </div>
         <div id='btn_submit_mask'>
-          <input type='button' value='Number Correct' id='btn_submit' />
+          <input type='button' value='Submit Input' id='btn_submit' />
         </div>
       </div>
-      <input type='button' value='Word Removed' id='btn_removed' />
     </div>
-    <p id='wordlist'>&nbsp;</p>
     <p id='message'>&nbsp;</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Word</th>
+          <th>Score</th>
+          <th>Position</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
   </form>
 {% endblock %}

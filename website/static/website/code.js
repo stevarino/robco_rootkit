@@ -1,34 +1,43 @@
 // Score results in word: score object. Removed words should have a score of -1.
 // Object should be fine as order is not important to state deduction.
-var Scores = {};
+var Scores = [];
 
+/*
+  Set up event callbacks.
+  */
 $(function() {
   $("#words").on('input', word_input);
   $("#btn_submit").on('click', btn_submit);
-  $("#btn_removed").on('click', btn_submit);
   disable_form();
 });
 
+/*
+  Handle changes to the word input textearea. This will generate API
+  calls.
+  */
 function word_input(e) {
-  Scores = {};
+  Scores = [];
   if ($("#words").val() != "") {
-    var form = $("form").serializeObject();
-    $.post("api", JSON.stringify(form), process_response);
+    submit_form();
   } else {
     $("#wordlist").empty();
     disable_form();
   }
 }
 
+/*
+  Submit button pressed - generate an API call with the feedback
+  property modified.
+  */
 function btn_submit() {
   var i = parseInt($("#correct option:selected").val())
   if (!isNaN(i)) {
-
+    Scores.push({
+      word: $("#suggest option:selected").val(),
+      feedback: i
+    });
+    submit_form();
   }
-}
-
-function btn_removed() {
-
 }
 
 // processes the response from the server. This includes calling
@@ -36,41 +45,78 @@ function btn_removed() {
 function process_response(res) {
   $("#wordlist").empty();
   for (var i=0; i<res.words.length; i++) {
-    create_word_link(res.words[i]);
+    // create_word_link(res.words[i]);
   }
 
-  if (res.valid) {
+  if (! res.valid) {
+    disable_form();
+  } else {
     $("#correct").removeAttr("disabled");
     $("#correct_mask").removeClass("disabled");
     $("#btn_submit").removeAttr("disabled");
-    $("#btn_removed").removeAttr("disabled");
     $("#correct").removeAttr("disabled");
     $("#suggest select").removeAttr("disabled");
 
     $("#suggest select").empty();
-    for (var i=0; i<res.words.length; i++) {
-      $("#suggest select").append(
-        $("<option>")
-          .attr("value", res.words[i].word)
-          .text(res.words[i].word)
-      );
+
+    // build word choice select
+    var word = "";
+    for (i in res.words) {
+      word = res.words[i].word;
+      if (res.words[i].valid) {
+        $("#suggest select").append(
+          $("<option>")
+            .attr("value", word)
+            .text(word)
+        );
+      }
     }
 
+    // build feedback select box
     $("#correct").empty();
-    for (var i=0; i<=res.words[0].word.length; i++) {
-      $("#correct").append(
-        $("<option>").attr("value", i).text(i)
-      );
+    $("#correct").append(
+      $("<option>").attr("value", -1).text("DEL")
+    );
+    for (var i=0; i<=word.length; i++) {
+      var opt = $("<option>").attr("value", i).text(i)
+      if (i == 0) {
+        opt.attr("selected", "selected");
+      }
+      $("#correct").append(opt);
     }
-
-  } else {
-    disable_form();
   }
+
+  // table
+  $("table tbody").empty();
+  for (var i=0; i<res.words.length; i++) {
+    var td_w = $("<td>").text(res.words[i].word)
+    if (! res.words[i].valid) {
+      td_w.addClass('invalid');
+    }
+    var td_s = $("<td>");
+    if ('score' in res.words[i]) {
+      td_s.text(res.words[i].score);
+    }
+    var tr = $("<tr>");
+    tr.append(td_w);
+    tr.append(td_s);
+    tr.append($("<td>").text(res.words[i].position))
+    $("tbody").append(tr);
+  }
+  // message
   if (res.message !== undefined) {
     $("#message").text(res.message);
   } else {
-    $("#message").text("");
+    $("#message").html("&nbsp;");
   }
+}
+
+// submits the form data to the api.
+function submit_form() {
+  $.post("api", JSON.stringify({
+    'words': $("#words").val(),
+    'feedback': Scores
+  }), process_response);
 }
 
 // resets the form to ensure ready for new input.
@@ -78,7 +124,6 @@ function disable_form() {
   $("#correct").attr("disabled", "disabled");
   $("#correct_mask").addClass("disabled");
   $("#btn_submit").attr("disabled", "disabled");
-  $("#btn_removed").attr("disabled", "disabled");
   $("#suggest select").attr("disabled", "disabled");
   $("#suggest select").empty().append("<option></option>");
 }
@@ -107,11 +152,6 @@ function create_word_link(word) {
     $("#wordlist").append(" &nbsp;");
 }
 
-// user clicked number_correct button. Add to Scores object and process.
-function number_correct_onclick(e) {
-
-}
-
 // serialize form into json
 // http://stackoverflow.com/questions/1184624/convert-form-data-to-javascript-object-with-jquery
 $.fn.serializeObject = function()
@@ -128,5 +168,6 @@ $.fn.serializeObject = function()
             o[this.name] = this.value || '';
         }
     });
+    o.feedback = Scores;
     return o;
 };
