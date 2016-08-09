@@ -8,6 +8,7 @@ var Scores = [];
 $(function() {
   $("#words").on('input', word_input);
   $("#btn_submit").on('click', btn_submit);
+  $("#btn_reset").on('click', btn_reset);
   disable_form();
 });
 
@@ -40,6 +41,13 @@ function btn_submit() {
   }
 }
 
+function btn_reset() {
+  $("#words").val("");
+  $("#words").focus();
+  word_input();
+  build_table([]);
+}
+
 // processes the response from the server. This includes calling
 // create_word_link and activating/deactivating the appropriate elements.
 function process_response(res) {
@@ -54,6 +62,7 @@ function process_response(res) {
     $("#correct").removeAttr("disabled");
     $("#correct_mask").removeClass("disabled");
     $("#btn_submit").removeAttr("disabled");
+    $("#btn_reset").removeAttr("disabled");
     $("#correct").removeAttr("disabled");
     $("#suggest select").removeAttr("disabled");
 
@@ -86,28 +95,33 @@ function process_response(res) {
     }
   }
 
-  // table
-  $("table tbody").empty();
-  for (var i=0; i<res.words.length; i++) {
-    var td_w = $("<td>").text(res.words[i].word)
-    if (! res.words[i].valid) {
-      td_w.addClass('invalid');
-    }
-    var td_s = $("<td>");
-    if ('score' in res.words[i]) {
-      td_s.text(res.words[i].score);
-    }
-    var tr = $("<tr>");
-    tr.append(td_w);
-    tr.append(td_s);
-    tr.append($("<td>").text(res.words[i].position))
-    $("tbody").append(tr);
-  }
+  build_table(res.words);
+
   // message
   if (res.message !== undefined) {
     $("#message").text(res.message);
   } else {
     $("#message").html("&nbsp;");
+  }
+}
+
+function build_table(words) {
+  // table
+  $("table tbody").empty();
+  for (var i=0; i<words.length; i++) {
+    var td_w = $("<td>").text(words[i].word)
+    if (! words[i].valid) {
+      td_w.addClass('invalid');
+    }
+    var td_s = $("<td>");
+    if ('score' in words[i]) {
+      td_s.text(words[i].score);
+    }
+    var tr = $("<tr>");
+    tr.append(td_w);
+    tr.append(td_s);
+    tr.append($("<td>").text(words[i].position))
+    $("tbody").append(tr);
   }
 }
 
@@ -124,6 +138,7 @@ function disable_form() {
   $("#correct").attr("disabled", "disabled");
   $("#correct_mask").addClass("disabled");
   $("#btn_submit").attr("disabled", "disabled");
+  $("#btn_reset").attr("disabled", "disabled");
   $("#suggest select").attr("disabled", "disabled");
   $("#suggest select").empty().append("<option></option>");
 }
