@@ -18,9 +18,11 @@ feedback = "{" "'word'" ":" word "," "'feedback'" ":" feedback_score "}" .
 ```
 
 Request:
+
 ![EBNF Request Diagram](./website/static/website/docs/request.png)
 
 feedback:
+
 ![EBNF Request Feedback Diagram](./website/static/website/docs/feedback.png)
 
 ## Response Object Syntax
@@ -32,7 +34,9 @@ word_response = "{" "'word'" ":" word ","  "'valid'" ":" ("true" | "false") "," 
 ```
 
 Response:
+
 ![EBNF Response Diagram](./website/static/website/docs/response.png)
 
 word_response:
+
 ![EBNF Word Response Diagram](./website/static/website/docs/word_response.png)
