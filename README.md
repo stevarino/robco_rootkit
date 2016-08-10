@@ -12,7 +12,7 @@ All requests should be JSON objects posted to the /api URL. The service will res
 ## Request Object Syntax
 
 ```EBNF
-request = "{" "'words'" ":" "[" [ word  { "," word } ] "]" \n ["'feedback'" ":" "[" [ feedback { "," feedback  } ] "]" ] \n "}" .
+request = "{" "'words'" ":" "[" [ word  { "," word } ] "]"  ["'feedback'" ":" "[" [ feedback { "," feedback  } ] "]" ]  "}" .
 
 feedback = "{" "'word'" ":" word "," "'feedback'" ":" feedback_score "}" .
 ```
@@ -24,9 +24,9 @@ feedback = "{" "'word'" ":" word "," "'feedback'" ":" feedback_score "}" .
 ## Response Object Syntax
 
 ```EBNF
-response = "{" "'valid'" ":" ( true | false ) "," \n [ "'message'" ":" message "," ] \n "'words'" ":" "[" [ word_response {"," word_response} ] "]" \n "}" .
+response = "{" "'valid'" ":" ( true | false ) ","  [ "'message'" ":" message "," ]  "'words'" ":" "[" [ word_response {"," word_response} ] "]"  "}" .
 
-word_response = "{" "'word'" ":" word "," \n "'valid'" ":" ("true" | "false") "," \n "'position'" ":" position "," \n [ "'score'" ":" score "," ] \n [ "'feedback'" ":" feedback_score ] \n "}" .
+word_response = "{" "'word'" ":" word ","  "'valid'" ":" ("true" | "false") ","  "'position'" ":" position ","  [ "'score'" ":" score "," ]  [ "'feedback'" ":" feedback_score ]  "}" .
 ```
 
 ![EBNF Response Diagram](./website/static/website/docs/response.png)
